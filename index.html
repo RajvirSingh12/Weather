@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+
+<html >
+
+
+<style>
+
+.form{
+border-radius: 20px;
+padding: 15px;
+    height: 35px;
+    width: 250px;
+    margin-left: 40%;
+}
+
+#result{
+  margin:auto;
+  text-align:center;
+
+</style>
+
+
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
+<style>
+#loader{
+border: 20px solid black;
+width: 200px; height: 200px;
+border-top: 20px solid red;
+border-right: 20px solid green;
+border-radius: 50%;
+margin-left: 45%;
+animation: AAA 1.5s linear infinite;
+
+}
+
+@keyframes AAA {
+
+0% { transform: rotate(0deg) ; background: white; width:200px; height: 200px;}
+50% { transform: rotate(180deg); background: transparent; width:100px; height: 100px;}
+100% { transform: rotate(360deg) ; background: white; height: 200px}
+
+}
+
+</style>
+
+<script type = "text/javascript">
+	$(document).ready (function(){
+		$("button").click(function(){
+		var z_cod = $("#z_cod").val();
+				if (z_cod != ''){
+					$.ajax({
+						type: "GET",
+						url: "weather.php",
+						data: "z_code=" +z_cod,
+				
+        		beforeSend: function (){        
+								$("#loader").show();
+                $("#box").html("waiting....");               
+						},
+
+					error:function(xhr,status,error) {
+
+                    alert ("Error Message: \r\nNumric code is :" + xhr.status +"\r\n Error is "+error);
+
+                    },
+
+						success: function (result){
+                $("#loader").hide();                       
+								x = JSON.parse(result);
+
+								temp=x.main.temp;
+                temp=(parseFloat(temp)-273.15)* 9/5 +32;
+
+								info ="<h3><b>Zipcode Location</b>:    " +x.name+ ", " +x.sys.country +"<br> </h3>"+
+                                                       
+                      "<h3><b>Coordinates</b>:         "+x.coord.lon+", "+x.coord.lat+"<br></h3>"+
+                      
+                      "<h3><b>Temperature</b>:         " +temp.toFixed(0) +"&deg;F<br> </h3>"+
+                      
+                      "<h3><b>Weather</b>:             " +x.weather[0].main +"<br> </h3>"+
+
+                      "<h3><b>Description</b>:         " +x.weather[0].description +"<img src='http://openweathermap.org/img/w/"+x.weather[0].icon+".png'><br> </h3>"+
+                       
+                      "<h3><b>Wind Speed</b>:          " +x.wind.speed+" m/s<br> </h3>"+ 
+
+                      "<h3><b>Pressure</b>:            " +x.main.pressure +" hPa<br> </h3>"+  
+                       
+                      "<h3><b>Sunrise</b>:             " +x.sys.sunrise +"<br> </h3>"+ 
+                       
+                      "<h3><b>Humidity</b>:            " +x.main.humidity +" %<br> </h3>" 
+   
+								 $("#box").html(info);
+						}
+					});
+				};
+		});
+	});
+
+</script>
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<body background="snowman.jpg" >
+        <div class=" w3-center w3-animate-top"></div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<h1 class="text-center" style="front-size:80px; front-weight:1000; "><b>Weather Forecast</b></h1>
+<br>
+
+<input  class="form" type = "text" id="z_cod" autocompplete="off" placeholder ="Enter Zipcode" required>
+
+<button  class="btn btn-success" id= "button"> Request Weather </button>
+
+<div class=" w3-center " id="box" > <br> </div>
+</body>
+  
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<body>
+          <div class=" w3-center ">
+         
+          </div>
+
+<div id="loader"></div>
+</body>
+
+   </head>
+
+	</html> 
